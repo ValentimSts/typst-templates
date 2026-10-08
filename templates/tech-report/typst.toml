@@ -1,0 +1,15 @@
+[package]
+name = "tech-report"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Valentim Santos"]
+license = "MIT"
+description = "Technical report and design document template with a cover, document control, status marks and generated registers."
+keywords = ["report", "design document", "architecture", "document control"]
+categories = ["report"]
+compiler = "0.15.0"
+
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "thumbnail.png"
