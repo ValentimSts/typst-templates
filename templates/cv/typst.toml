@@ -1,0 +1,15 @@
+[package]
+name = "cv"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Valentim Santos"]
+license = "MIT"
+description = "A minimal one- or two-page CV: a centered header with contact icons, sections over hairlines, entries with dates or links set right."
+keywords = ["cv", "resume", "curriculum vitae"]
+categories = ["cv"]
+compiler = "0.15.0"
+
+[template]
+path = "template"
+entrypoint = "cv.typ"
+thumbnail = "thumbnail.png"
