@@ -1,0 +1,10 @@
+[package]
+name = "base"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Valentim Santos"]
+license = "MIT"
+description = "What the templates in this repository share: the neutral grays, theme merging, drawn list markers and small text helpers."
+keywords = ["theme", "helpers"]
+categories = ["utility"]
+compiler = "0.15.0"
