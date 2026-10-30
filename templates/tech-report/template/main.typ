@@ -1,23 +1,22 @@
 #import "@local/tech-report:0.1.0": *
 
-// Marks are defined per document. Marks with a `register` get a generated
-// list after the contents; the `description` feeds the key on the
-// document control page.
+// Marks are defined per document: a gray card ("fill", the default) or a
+// hairline frame ("outline"). Marks with a `register` get a generated list
+// after the contents; the `description` feeds the key on the document
+// control page.
 #let mark-specs = (
   decision: (
     label: "Open decision",
-    tone: "warning",
     register: "Open decisions",
     description: [A recommended default the team still has to confirm, with the owner named.],
   ),
   risk: (
     label: "Risk",
-    tone: "danger",
     description: [A known weakness, with its likelihood and impact.],
   ),
   note: (
     label: "Note",
-    tone: "info",
+    style: "outline",
     description: [Context that helps the reader but changes no decision.],
   ),
 )
@@ -33,7 +32,14 @@
   date: datetime(year: 2026, month: 1, day: 15),
   classification: "Internal",
   organisation: "Example Org",
-  authors: ((name: "Jane Doe", role: "Platform Engineer"),),
+  logo: placeholder-logo, // your own: path("logo.svg")
+  authors: (
+    (
+      name: "Jane Doe",
+      role: "Platform Engineer",
+      email: "jane.doe@example.com",
+    ),
+  ),
   owner: "Platform team",
   reviewers: ("Security architecture",),
   distribution: ("Platform team", "Security architecture"),
@@ -48,7 +54,13 @@
     ),
   ),
   marks: mark-specs,
-  // theme: (accent: rgb("#ffe600"), on-accent: black, primary: black),
+  // Abbreviations: the first use of each one the text uses twice reads
+  // "full name (ABBR)", and those entries are listed after the contents.
+  glossary: (
+    API: "application programming interface",
+    CI: "continuous integration",
+    SLA: "service level agreement",
+  ),
 )
 
 = Executive summary <sec-summary>
@@ -56,7 +68,8 @@
 #lorem(80)
 
 The target design is described in @sec-target and its open questions are
-listed in @sec-decisions.
+listed in @sec-decisions. Every service publishes an API with an SLA, and the
+API gateway reports against that SLA.
 
 #note[
   Section numbers in references are live: they follow the headings if
@@ -114,7 +127,7 @@ spec:
 
 #show: appendix
 
-= Glossary
+= Definitions
 
 / GitOps: Delivery where a Git repository is the source of truth for what
   runs.

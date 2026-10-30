@@ -1,5 +1,6 @@
-// Running header, footer and draft watermark for body pages.
+// Running header and footer for body pages.
 
+#import "theme.typ": pill
 #import "utils.typ": appendix-state, heading-number
 
 #let chapter-label(chapter) = {
@@ -9,51 +10,47 @@
 }
 
 // Shows the short title and the current chapter, except on pages where a
-// chapter opens: those pages carry the chapter title already.
-#let body-header(theme, short-title) = context {
-  let here-page = here().page()
-  let chapters = query(heading.where(level: 1)).filter(h => (
+// chapter or the appendix divider opens: those carry their title already.
+#let body-header(theme, short-title, draft) = context {
+  let chapters = heading.where(level: 1)
+  let next = query(chapters.after(here()))
+  if next.len() > 0 and next.first().location().page() == here().page() {
+    return
+  }
+  let previous = query(chapters.before(here())).filter(h => (
     h.numbering != none
   ))
-  if chapters.any(h => h.location().page() == here-page) { return }
-  let previous = chapters.filter(h => h.location().page() < here-page)
-  set text(size: 8pt, fill: theme.muted)
+  set text(size: 8pt, fill: theme.secondary)
   grid(
     columns: (auto, 1fr),
     column-gutter: 12pt,
-    align: (left + bottom, right + bottom),
-    short-title, if previous.len() > 0 { chapter-label(previous.last()) },
+    align: (left + horizon, right + horizon),
+    {
+      short-title
+      if draft {
+        h(6pt)
+        pill(theme, filled: true)[Draft]
+      }
+    },
+    if previous.len() > 0 { chapter-label(previous.last()) },
   )
-  v(-5pt)
-  line(length: 100%, stroke: 0.5pt + theme.rule)
 }
 
 #let body-footer(theme, left-text) = context {
-  set text(size: 8pt, fill: theme.muted)
+  set text(size: 8pt, fill: theme.secondary)
   let total = counter(page).final().first()
   grid(
     columns: (1fr, auto),
     align: (left, right),
-    left-text, [Page #counter(page).display() of #total],
+    left-text, [#counter(page).display() of #total],
   )
 }
 
 #let front-footer(theme, left-text) = context {
-  set text(size: 8pt, fill: theme.muted)
+  set text(size: 8pt, fill: theme.secondary)
   grid(
     columns: (1fr, auto),
     align: (left, right),
     left-text, counter(page).display("i"),
   )
 }
-
-#let watermark(theme, label) = place(
-  center + horizon,
-  rotate(-50deg, text(
-    size: 120pt,
-    weight: "bold",
-    tracking: 0.08em,
-    fill: theme.ink.transparentize(95%),
-    label,
-  )),
-)

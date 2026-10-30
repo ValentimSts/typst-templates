@@ -1,5 +1,3 @@
-// Small helpers shared by the components.
-
 #let appendix-state = state("tech-report-appendix", false)
 
 #let as-array(value) = {
@@ -16,9 +14,15 @@
 }
 
 // A person is a string, content, or a dictionary with `name` and an
-// optional `role`.
+// optional `role` and `email`.
 #let person-name(person) = {
   if type(person) == dictionary { person.name } else { person }
+}
+
+#let person-email(person) = {
+  if type(person) == dictionary { person.at("email", default: none) } else {
+    none
+  }
 }
 
 #let person-line(person) = {

@@ -2,6 +2,7 @@
 
 #import "utils.typ": as-array, format-date, person-line
 #import "marks.typ": marks-key, register
+#import "glossary.typ": glossary-list
 
 #let front-heading(level: 1, body) = heading(
   level: level,
@@ -11,15 +12,15 @@
   body,
 )
 
-// A two-column key/value table with labels in the first column.
+// The document's facts: bold labels and hairlines, without a header row.
+// The first row is data, so it drops the header styling tables give row 0.
 #let facts-table(theme, rows) = {
   show table.cell.where(y: 0): set text(weight: "regular", fill: theme.ink)
   table(
     columns: (auto, 1fr),
-    fill: (x, _) => if x == 0 { theme.surface },
     stroke: (_, y) => (
-      top: if y == 0 { 0.8pt + theme.ink },
-      bottom: 0.5pt + theme.rule,
+      top: if y == 0 { 0.5pt + theme.separator },
+      bottom: 0.5pt + theme.separator,
     ),
     ..rows.map(((key, value)) => (strong(key), value)).flatten(),
   )
@@ -40,6 +41,7 @@
   status: none,
   date: none,
   classification: none,
+  organisation: none,
   owner: none,
   authors: (),
   reviewers: (),
@@ -59,6 +61,7 @@
     ("Status", status),
     ("Date", format-date(date)),
     ("Classification", classification),
+    ("Organisation", organisation),
     ("Owner", people(owner)),
     ("Authors", people(authors)),
     ("Reviewers", people(reviewers)),
@@ -114,3 +117,5 @@
     }
   }
 }
+
+#let glossary(entries) = glossary-list(entries, front-heading)

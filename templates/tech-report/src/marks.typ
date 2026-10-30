@@ -4,8 +4,9 @@
 // labelled, referenceable entry when it is given an `id`, so `@O4` links to
 // it and `register()` can list it.
 
-#import "theme.typ": theme-state, tone-color
+#import "theme.typ": pill, theme-state
 #import "utils.typ": page-label
+#import "glossary.typ": no-glossary
 
 #let mark-kind(name) = "tech-report-mark-" + name
 
@@ -13,21 +14,13 @@
   type(it.kind) == str and it.kind.starts-with("tech-report-mark-")
 )
 
-// The small uppercase label used in a mark's header and in the key.
-#let mark-chip(theme, spec) = {
-  let tone = tone-color(theme, spec.at("tone", default: "neutral"))
-  text(
-    size: 0.78em,
-    weight: "bold",
-    tracking: 0.07em,
-    fill: tone.darken(15%),
-    upper(spec.at("label", default: spec.at("name", default: ""))),
-  )
-}
+// A mark is either a gray card ("fill") or a hairline frame ("outline").
+#let surface(theme, style) = if style == "outline" {
+  (fill: none, stroke: 0.75pt + theme.separator)
+} else { (fill: theme.fill, stroke: none) }
 
 #let mark-box(spec, id: none, title: none, mention: false, body) = context {
   let theme = theme-state.get()
-  let tone = tone-color(theme, spec.tone)
   // A mention points back at the canonical entry when one exists.
   let id-part = if id == none { none } else if (
     mention and query(label(id)).len() > 0
@@ -35,28 +28,27 @@
   block(
     width: 100%,
     breakable: true,
-    fill: tone.lighten(94%),
-    stroke: (left: 2.5pt + tone),
-    radius: (right: 2pt),
-    inset: (left: 11pt, right: 10pt, top: 8pt, bottom: 9pt),
-    above: 1.4em,
-    below: 1.4em,
+    radius: 8pt,
+    inset: (x: 14pt, top: 11pt, bottom: 12pt),
+    above: 1.5em,
+    below: 1.5em,
+    ..surface(theme, spec.style),
   )[
     // Canonical entries are figures, which centre their body by default.
     #set align(start)
     #set text(size: 0.94em)
     #set par(spacing: 0.85em)
-    #block(sticky: true, below: 0.6em)[
-      #mark-chip(theme, spec)
-      #if id-part != none or title != none {
-        h(0.5em)
-        strong({
-          id-part
-          if id-part != none and title != none [ #sym.dot.c ]
+    #block(sticky: true, below: 0.6em, no-glossary({
+      text(size: 0.85em, weight: "semibold", fill: theme.accent, spec.label)
+      if id-part != none or title != none {
+        linebreak()
+        text(weight: "semibold", {
+          if id-part != none { text(fill: theme.secondary, id-part) }
+          if id-part != none and title != none { h(0.45em) }
           title
         })
       }
-    ]
+    }))
     #body
   ]
 }
@@ -66,14 +58,18 @@
 #let mark(
   name,
   label: none,
-  tone: "neutral",
+  style: "fill",
   register: none,
   description: none,
 ) = {
+  assert(
+    style in ("fill", "outline"),
+    message: "tech-report: a mark's style is \"fill\" or \"outline\"",
+  )
   let spec = (
     name: name,
     label: if label == none { name } else { label },
-    tone: tone,
+    style: style,
     register: register,
     description: description,
   )
@@ -108,6 +104,7 @@
 #let register(name, title: none) = context {
   let entries = query(figure.where(kind: mark-kind(name)))
   if entries.len() == 0 { return }
+  // A canonical entry's numbering ignores the count and returns its id.
   let rows = entries
     .map(f => (
       id: (f.numbering)(1),
@@ -124,7 +121,7 @@
     table.header([ID], [Title], [Page]),
     ..rows
       .map(e => (
-        link(e.loc, strong(e.id)),
+        link(e.loc, e.id),
         link(e.loc, e.title),
         link(e.loc, page-label(e.loc)),
       ))
@@ -132,32 +129,28 @@
   )
 }
 
-// "How to read the marks": each mark that has a description, with its chip.
+// "How to read the marks": each mark that has a description, shown as a
+// capsule in its own style beside the description.
 #let marks-key(specs) = context {
   let theme = theme-state.get()
   let described = specs
     .pairs()
     .filter(((_, spec)) => spec.at("description", default: none) != none)
   if described.len() == 0 { return }
-  grid(
+  block(breakable: false, grid(
     columns: (auto, 1fr),
     column-gutter: 14pt,
-    row-gutter: 10pt,
+    row-gutter: 9pt,
     align: (left + top, left + top),
     ..described
       .map(((name, spec)) => (
-        box(
-          fill: tone-color(theme, spec.at("tone", default: "neutral")).lighten(
-            94%,
-          ),
-          stroke: (
-            left: 2pt + tone-color(theme, spec.at("tone", default: "neutral")),
-          ),
-          inset: (x: 6pt, y: 4pt),
-          mark-chip(theme, (name: name) + spec),
+        pill(
+          theme,
+          spec.at("label", default: name),
+          filled: spec.at("style", default: "fill") == "fill",
         ),
         spec.description,
       ))
       .flatten(),
-  )
+  ))
 }
