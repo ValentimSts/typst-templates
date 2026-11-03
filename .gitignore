@@ -1,0 +1,5 @@
+# Compiled output
+*.pdf
+
+# Documents built with the templates: private work, never committed
+/documents/

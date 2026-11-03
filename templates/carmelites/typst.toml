@@ -1,0 +1,15 @@
+[package]
+name = "carmelites"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Valentim Santos"]
+license = "MIT"
+description = "Prayer guides and formation handouts for a Discalced Carmelite youth group, in Portuguese: chants, readings, Pistas de Oracao and texts with their sources."
+keywords = ["prayer", "liturgy", "carmelite", "catholic", "portuguese"]
+categories = ["flyer"]
+compiler = "0.15.0"
+
+[template]
+path = "template"
+entrypoint = "prayer-guide.typ"
+thumbnail = "thumbnail.png"
