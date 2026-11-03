@@ -48,7 +48,8 @@ Security engineer with a background in #lorem(30)
 
 #entry(
   title: [Master's Degree in Lorem Ipsum],
-  subtitle: [Dolor University, Lisbon, Portugal],
+  subtitle: [Dolor University],
+  location: [Lisbon, Portugal],
   meta: [Sep 2023 -- Oct 2025],
 )[
   - Graduated with honours.
@@ -57,16 +58,23 @@ Security engineer with a background in #lorem(30)
 
 #entry(
   title: [Exchange Programme],
-  subtitle: [Sit Amet University, Darmstadt, Germany],
+  subtitle: [Sit Amet University],
+  location: [Darmstadt, Germany],
   meta: [Oct 2024 -- Mar 2025],
 )[]
 
 = Skills
 
 #skills((
-  "Programming Languages": [Python, Java, C, Rust, TypeScript, SQL],
-  "Tools": [Docker, Kubernetes, Terraform, Linux, Git],
-  "Soft Skills": [Problem solving, communication, teamwork],
+  "Security": (
+    "Malware analysis",
+    "Reverse engineering",
+    "Static and dynamic analysis",
+    "Ghidra",
+    "Burp Suite",
+  ),
+  "Cloud & DevSecOps": ("Azure", "Kubernetes", "Docker", "Terraform", "CI/CD"),
+  "Programming": ("Python", "Java", "C", "Rust", "TypeScript", "SQL"),
 ))
 
 = Languages

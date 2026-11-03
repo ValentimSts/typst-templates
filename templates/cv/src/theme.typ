@@ -7,6 +7,7 @@
 #let default-theme = (
   ..grays,
   accent: luma(29), // section titles and links: black like the text
+  fill: luma(240), // skill pills
   fonts: (
     body: ("Inter", "Liberation Sans"),
     // The name, as Apple switches to its Display cut for large sizes.

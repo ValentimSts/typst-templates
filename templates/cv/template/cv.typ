@@ -21,6 +21,7 @@ One or two sentences on who you are and what you focus on.
 #entry(
   title: [Role],
   subtitle: [Company],
+  location: [City, Country],
   meta: [Jan 2025 -- Present],
 )[What you did, with what, and what came of it.]
 
@@ -35,7 +36,8 @@ One or two sentences on who you are and what you focus on.
 
 #entry(
   title: [Degree],
-  subtitle: [University, City, Country],
+  subtitle: [University],
+  location: [City, Country],
   meta: [Sep 2021 -- Jul 2024],
 )[
   - A distinction.
@@ -44,8 +46,8 @@ One or two sentences on who you are and what you focus on.
 = Skills
 
 #skills((
-  "Programming Languages": [Python, TypeScript],
-  "Tools": [Git, Docker],
+  "Programming": ("Python", "TypeScript"),
+  "Tools": ("Git", "Docker"),
 ))
 
 = Languages
